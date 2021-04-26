@@ -1,35 +1,24 @@
 # User Guide 2.+
 
 ## Applying the Plugin
-Include the plugin jar in your buildscript classpath and apply the appropriate plugin:
+Apply the plugin following the instructions in [README.md](README.md#how-to-use) and using the appropriate plugin identifier:
+1. `"com.google.cloud.tools.appengine-appenginewebxml"` for war projects defined by an `appengine-web.xml`
+1. `"com.google.cloud.tools.appengine-appyaml"` for projects defined by an `app.yaml`
+1. `"com.google.cloud.tools.appengine"` for automatic environment determination (not recommended)
 
-```groovy
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath "com.google.cloud.tools:appengine-gradle-plugin:<version>"
-  }
-}
-
-apply plugin: "com.google.cloud.tools.appengine" // for automatic environment determination
-// or
-apply plugin: "com.google.cloud.tools.appengine-appenginewebxml"
-// or
-apply plugin: "com.google.cloud.tools.appengine-appyaml"
-```
 
 When you use the `com.google.cloud.tools.appengine` plugin it will automatically determine
 your environment based on the presence of an `appengine-web.xml`
 in `src/main/webapp/WEB-INF/`. It will enable _`appengine-appenginewebxml`_ if present, _`appengine-appyaml`_ otherwise.
 
 The [Cloud SDK](https://cloud.google.com/sdk) is required for this plugin to
-function. Download and install it before running any tasks.
+function. Versions greater than `2.0.0` will automatically download and install it for you. You may also choose to download and install it before running any tasks.
 
 ---
 
 ## App Engine `appengine-web.xml` based projects
+
+Follow the [instructions](#applying-the-plugin) to apply the `appengine-appenginewebxml` plugin on the project
 
 ### Tasks
 The plugin exposes the following tasks :
@@ -97,6 +86,7 @@ The `tools` configuration has the following parameters :
 | `serviceAccountKeyFile` | A Google project service account key file to run Cloud SDK operations requiring an authenticated user. |
 | `cloudSdkHome`          | Location of the Cloud SDK. |
 | `cloudSdkVersion`       | The desired version of the Cloud SDK (e.g. "192.0.0"). |
+| `verbosity`             | The verbosity level for logging when gcloud is run. See [gcloud docs](https://cloud.google.com/sdk/gcloud/reference#--verbosity) for allowed values. |
 
 The Cloud SDK will be installed/updated/verified depending on which parameters are configured:
 
@@ -249,6 +239,8 @@ The v2-alpha Dev Appserver is no longer supported from this plugin.
 
 ## App Engine `app.yaml` based projects
 
+Follow the [instructions](#applying-the-plugin) to apply the `appengine-appyaml` plugin on the project
+
 ### Tasks
 The plugin exposes the following tasks :
 
@@ -300,8 +292,10 @@ The `tools` configuration has the following parameters :
 
 | Parameter         | Description |
 | ----------------- | ----------- |
-| `cloudSdkHome`    | Location of the Cloud SDK. |
-| `cloudSdkVersion` | The desired version of the Cloud SDK (e.g. "192.0.0"). |
+| `serviceAccountKeyFile` | A Google project service account key file to run Cloud SDK operations requiring an authenticated user. |
+| `cloudSdkHome`          | Location of the Cloud SDK. |
+| `cloudSdkVersion`       | The desired version of the Cloud SDK (e.g. "192.0.0"). |
+| `verbosity`             | The verbosity level for logging when gcloud is run. See [gcloud docs](https://cloud.google.com/sdk/gcloud/reference#--verbosity) for allowed values. |
 
 The Cloud SDK will be installed/updated/verified depending on which parameters are configured:
 
@@ -325,7 +319,7 @@ The `stage` configuration has the following parameters :
 | ----------------------- | ----------- |
 | `appEngineDirectory`    | The directory that contains app.yaml. |
 | `dockerDirectory`       | The directory that contains Dockerfile and other docker context. |
-| `artifact`              | The artifact to deploy (a file, like a .jar or a .war). |
+| `artifact`              | The artifact to deploy (a file, like a .jar, a .war or a binary). |
 | `stagingDirectory`      | The directory to which to stage the application. |
 | `extraFilesDirectories` | The list of directories to copy extra files from. |
 

@@ -61,6 +61,7 @@ public class AppEngineStandardPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     this.project = project;
+    project.getPluginManager().apply(WarPlugin.class);
     appengineExtension =
         project.getExtensions().create("appengine", AppEngineStandardExtension.class);
     appengineExtension.createSubExtensions(project);
@@ -97,7 +98,8 @@ public class AppEngineStandardPlugin implements Plugin<Project> {
           // tools extension required to initialize cloudSdkOperations
           ToolsExtension tools = appengineExtension.getTools();
           try {
-            cloudSdkOperations = new CloudSdkOperations(tools.getCloudSdkHome(), null);
+            cloudSdkOperations =
+                new CloudSdkOperations(tools.getCloudSdkHome(), null, tools.getVerbosity());
           } catch (CloudSdkNotFoundException ex) {
             // this should be caught in AppEngineCorePluginConfig before it can ever reach here.
             throw new GradleException("Could not find CloudSDK: ", ex);
